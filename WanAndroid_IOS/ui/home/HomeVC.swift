@@ -63,7 +63,7 @@ class HomeVC: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = true // 隐藏导航栏 发现在viewDidLoad里面无效
+        self.navigationController?.navigationBar.isHidden = true // 隐藏导航栏 发现在 viewDidLoad 里面无效
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -74,8 +74,10 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(tableView)
+        // MARK: snapkit 是这样使用的
+        // TODO: snapkit 的参数和具体的作用？
         tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()//发现不这样设置显示不出来
+            $0.edges.equalToSuperview() // 发现不这样设置显示不出来
         }
         
         tableView.tableHeaderView = bannerView
@@ -83,7 +85,7 @@ class HomeVC: UIViewController {
         if #available(iOS 11.0, *) {
             UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         } else {
-            automaticallyAdjustsScrollViewInsets = false //去掉顶部(或底部)出现一块空白区域
+            automaticallyAdjustsScrollViewInsets = false // 去掉顶部(或底部)出现一块空白区域
         }
         //开始请求数据
         //        getNetData()
@@ -92,73 +94,80 @@ class HomeVC: UIViewController {
     }
     
     func setRefresh() {
-        let header =   RefreshHeader{ [weak self] in
+        // MARK: 配置头部和底部的上下拉刷新
+        // TODO: 这里的 weak 关键字？？
+        let header = RefreshHeader { [weak self] in
             self?.getNetData(false)
         }
         header.isAutomaticallyChangeAlpha = true
         header.lastUpdatedTimeLabel?.isHidden = true
         tableView.mj_header = header
+        // 开始刷新
         header.beginRefreshing()
         
-        tableView.mj_footer =  RefreshAutoGifFooter{ [weak self] in
+        tableView.mj_footer = RefreshAutoGifFooter { [weak self] in
             self?.getNetData(true)
         }
         tableView.mj_footer?.isAutomaticallyChangeAlpha = true
     }
     
     func getNetData(_ loadMore : Bool = false) {
-        if(!loadMore){
+        if (!loadMore) {
             page = 0
         }else{
             page += 1
         }
-        HttpUtils.requestData(url: "article/list/\(page)/json", type: MethodType.get,
-                              callBack: {(value:HomeModel?) in
-                                //结束刷新
-                                if self.tableView.mj_header!.isRefreshing  { self.tableView.mj_header?.endRefreshing() }
-                                if self.tableView.mj_footer!.isRefreshing { self.tableView.mj_footer?.endRefreshing() }
-                                //是否加载更多
-                                if(loadMore){
-                                    self.homeLists.append(contentsOf: value?.datas ?? [])
-                                }else{
-                                    self.homeLists = value?.datas ?? []
-                                }
-                                self.tableView.reloadData()
-                                
+        HttpUtils.requestData(
+            url: "article/list/\(page)/json",
+            type: MethodType.get,
+            callBack: {(value: HomeModel?) in
+                // 结束刷新
+                if self.tableView.mj_header!.isRefreshing { self.tableView.mj_header?.endRefreshing() }
+                if self.tableView.mj_footer!.isRefreshing { self.tableView.mj_footer?.endRefreshing() }
+                // 是否加载更多
+                if (loadMore) {
+                    self.homeLists.append(contentsOf: value?.datas ?? [])
+                } else {
+                    self.homeLists = value?.datas ?? []
+                }
+                // MARK: 感觉是数据发生了变更之后重新刷新 UI，相当于 notifyDataSetChanged
+                self.tableView.reloadData()
         })
-        
-        //加载banner数据
-        HttpUtils.requestData(url: "banner/json",
-                              type: MethodType.get,
-                              callBack: {(value:Array<BannerModel>?) in
-                                self.bannerLists = value ?? []
-                                self.bannerView.imagePaths = value?.map{$0.imagePath} as! Array<String>
-                                self.bannerView.titles = value?.map{ $0.title!} ?? []
+        // 加载 banner 数据
+        HttpUtils.requestData(
+            url: "banner/json",
+            type: MethodType.get,
+            callBack: {(value:Array<BannerModel>?) in
+              self.bannerLists = value ?? []
+              self.bannerView.imagePaths = value?.map{$0.imagePath} as! Array<String>
+              self.bannerView.titles = value?.map{ $0.title! } ?? []
         })
     }
 }
 
-extension HomeVC:UITableViewDataSource,UITableViewDelegate{
+// MARK: 这里为 HomeVC 拓展了两个协议，主要用在 tableview 上面
+extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         MyLog(log: "homeLists.count\(homeLists.count)")
         return homeLists.count
     }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         100
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell =  tableView.dequeueReusableCell(for: indexPath, cellType: HomeCell.self)
+        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: HomeCell.self)
         cell.model = homeLists[indexPath.row]
         return cell
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //跳转到webview
+        // 跳转到 webview，也是网页跳转操作
         let myWebVC = MyWebVC()
         myWebVC.title = homeLists[indexPath.row].title
         myWebVC.url = homeLists[indexPath.row].link
-        
         navigationController?.pushViewController(myWebVC, animated: true)
     }
-    
 }
