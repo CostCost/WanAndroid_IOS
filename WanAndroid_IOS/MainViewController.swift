@@ -41,7 +41,7 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
             image: UIImage(named: "home_tabbar_night_32x32_"),
             selectedImage: UIImage(named: "home_tabbar_press_32x32_"));
         
-        let homeNVC = UINavigationController(rootViewController: homeVC);
+//        let homeNVC = UINavigationController(rootViewController: homeVC);
         //        homeNVC.navigationItem.title = "主页";
         
         // 知识体系
@@ -50,7 +50,7 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
             title: "项目",
             image: UIImage(named: "huoshan_tabbar_night_32x32_"),
             selectedImage: UIImage(named: "huoshan_tabbar_press_32x32_"));
-        let knowledgeNVC = UINavigationController(rootViewController: knowledgeVC);
+//        let knowledgeNVC = UINavigationController(rootViewController: knowledgeVC);
 
         // 热门
         let hotVC = HotTabVC();
@@ -58,7 +58,7 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
             title: "热门",
             image: UIImage(named: "weitoutiao_tabbar_night_32x32_"),
             selectedImage: UIImage(named: "weitoutiao_tabbar_press_32x32_"));
-        let hotNVC = UINavigationController(rootViewController: hotVC);
+//        let hotNVC = UINavigationController(rootViewController: hotVC);
 
         // 我的
         let myVC = MyTabViewVC()
@@ -66,7 +66,7 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
             title: "我的",
             image: UIImage(named: "mine_tabbar_night_32x32_"),
             selectedImage: UIImage(named: "mine_tabbar_press_32x32_"))
-        let myNVC = UINavigationController(rootViewController: myVC)
+//        let myNVC = UINavigationController(rootViewController: myVC)
 
         self.viewControllers = [homeVC, knowledgeVC, hotVC, myVC];
     }

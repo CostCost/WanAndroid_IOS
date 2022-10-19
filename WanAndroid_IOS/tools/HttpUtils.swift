@@ -40,7 +40,7 @@ class HttpUtils {
             // 1。校验结果 response.result.isSuccess
             guard let result = response.result.value else {
                 callBack(nil)
-                print("请求失败\(response.result.error ?? "")")
+                print("请求失败\(response.result.error)")
                 return
             }
             //2.结果回调回去
@@ -61,9 +61,9 @@ class HttpUtils {
        callBack: @escaping (_ result : [T]?) -> ()
     ) {
         let method = type == .get ? HTTPMethod.get :HTTPMethod.post
-        let headers: HTTPHeaders = [
-            "Cookie": ""
-        ]
+//        let headers: HTTPHeaders = [
+//            "Cookie": ""
+//        ]
         print("请求URL-----\(baseUrl+url)")
         Alamofire.request(
             baseUrl+url,
