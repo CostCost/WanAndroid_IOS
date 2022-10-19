@@ -7,18 +7,20 @@
 //
 
 import HandyJSON
-struct BannerModel:HandyJSON {
+
+// TODO: 有没有从 json 转换到数据结构的插件？？
+
+struct BannerModel: HandyJSON {
     var imagePath : String?
     var title : String?
     var url : String?
 }
 
-
-
-struct HomeModel:HandyJSON {
+struct HomeModel: HandyJSON {
     var datas : [HomeItemModel]?
 }
-struct HomeItemModel:HandyJSON {
+
+struct HomeItemModel: HandyJSON {
     //    "title" : "关于 Android Service，你该知道的都在这了。",
     //    "fresh" : true,
     //    "chapterId" : 502,
@@ -52,6 +54,3 @@ struct HomeItemModel:HandyJSON {
     var url : String?
     var link : String?
 }
-
-
-
