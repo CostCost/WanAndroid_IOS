@@ -8,6 +8,9 @@
 
 import UIKit
 
+/// 阅读记录：
+/// 1. 首页 tab 页面创建
+/// 2. 基于 uikit，用了很多 uikit 的控件
 class MainViewController: UITabBarController ,UINavigationControllerDelegate{
     
     override func viewDidLoad() {
@@ -22,9 +25,7 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
 //        self.navigationController?.isNavigationBarHidden = true
 //        self.navigationController?.setNavigationBarHidden(true, animated: true)
 //        self.navigationController?.isToolbarHidden = true
-        
     }
-
     
     // 去搜索页面
     @objc func clickSearch(){
@@ -35,39 +36,38 @@ class MainViewController: UITabBarController ,UINavigationControllerDelegate{
     func createTabs(){
         // 主页 Tab VC
         let homeVC = HomeVC();
-        homeVC.tabBarItem = UITabBarItem(title: "主页",  image: UIImage(named: "home_tabbar_night_32x32_"),
-                                      selectedImage: UIImage(named: "home_tabbar_press_32x32_"));
+        homeVC.tabBarItem = UITabBarItem(
+            title: "主页",
+            image: UIImage(named: "home_tabbar_night_32x32_"),
+            selectedImage: UIImage(named: "home_tabbar_press_32x32_"));
         
         let homeNVC = UINavigationController(rootViewController: homeVC);
         //        homeNVC.navigationItem.title = "主页";
         
-        
         // 知识体系
         let knowledgeVC = ProjectVC();
-        knowledgeVC.tabBarItem = UITabBarItem(title: "项目",  image: UIImage(named: "huoshan_tabbar_night_32x32_"),
-                                      selectedImage: UIImage(named: "huoshan_tabbar_press_32x32_"));
+        knowledgeVC.tabBarItem = UITabBarItem(
+            title: "项目",
+            image: UIImage(named: "huoshan_tabbar_night_32x32_"),
+            selectedImage: UIImage(named: "huoshan_tabbar_press_32x32_"));
         let knowledgeNVC = UINavigationController(rootViewController: knowledgeVC);
-                 
+
         // 热门
         let hotVC = HotTabVC();
-        hotVC.tabBarItem = UITabBarItem(title: "热门", image: UIImage(named: "weitoutiao_tabbar_night_32x32_"),
-                                      selectedImage: UIImage(named: "weitoutiao_tabbar_press_32x32_"));
+        hotVC.tabBarItem = UITabBarItem(
+            title: "热门",
+            image: UIImage(named: "weitoutiao_tabbar_night_32x32_"),
+            selectedImage: UIImage(named: "weitoutiao_tabbar_press_32x32_"));
         let hotNVC = UINavigationController(rootViewController: hotVC);
-        
-    
+
         // 我的
         let myVC = MyTabViewVC()
-        myVC.tabBarItem = UITabBarItem(title: "我的",  image: UIImage(named: "mine_tabbar_night_32x32_"),
-                                      selectedImage: UIImage(named: "mine_tabbar_press_32x32_"))
+        myVC.tabBarItem = UITabBarItem(
+            title: "我的",
+            image: UIImage(named: "mine_tabbar_night_32x32_"),
+            selectedImage: UIImage(named: "mine_tabbar_press_32x32_"))
         let myNVC = UINavigationController(rootViewController: myVC)
-        
-                
+
         self.viewControllers = [homeVC, knowledgeVC, hotVC, myVC];
     }
-    
-
-    
-    
-    
 }
-

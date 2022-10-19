@@ -15,14 +15,18 @@ import MBProgressHUD
 import HandyJSON
 import Reusable
 
-class HomeVC: UIViewController{
+/// 阅读记录
+/// 功能：首页列表
+/// 记录：
+/// MVC，view 和数据混杂
+class HomeVC: UIViewController {
     // 当前页面
     var page = 0
     
     private var homeLists = [HomeItemModel]()
     private var bannerLists = [BannerModel]()
     
-    private lazy var tableView:UITableView = UITableView(frame: .zero, style: .plain).then({
+    private lazy var tableView: UITableView = UITableView(frame: .zero, style: .plain).then({
         $0.backgroundColor = UIColor.white
         $0.delegate = self
         $0.dataSource = self
@@ -31,7 +35,6 @@ class HomeVC: UIViewController{
         //        self.automaticallyAdjustsScrollViewInsets = false//去掉顶部(或底部)出现一块空白区域
         //        $0.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         //        $0.scrollIndicatorInsets = $0.contentInset
-        
     })
     
     private lazy var bannerView = LLCycleScrollView().then{
@@ -47,17 +50,20 @@ class HomeVC: UIViewController{
         $0.pageControlPosition = .right //圆点位置
         $0.pageControlBottom = 20 //圆点距离底部的距离
         
-        $0.frame = CGRect(x: 0, y: 0, width:screenWidth , height: screenWidth/2)//banner大小设置
+        $0.frame = CGRect(x: 0, y: 0, width: screenWidth , height: screenWidth/2)//banner大小设置
         //点击事件
         $0.lldidSelectItemAtIndex = didSelectBanner(index:)
     }
-    func didSelectBanner(index:NSInteger)  {
-        let bannerModel =   bannerLists[index]
-        let myWebVC =  MyWebVC(title: bannerModel.title, url: bannerModel.url)
+
+    func didSelectBanner(index: NSInteger) {
+        let bannerModel = bannerLists[index]
+        let myWebVC = MyWebVC(title: bannerModel.title, url: bannerModel.url)
+        // TODO: pushViewController 函数的作用是？
         navigationController?.pushViewController(myWebVC, animated: true)
     }
+
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = true//隐藏导航栏 发现在viewDidLoad里面无效
+        self.navigationController?.navigationBar.isHidden = true // 隐藏导航栏 发现在viewDidLoad里面无效
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -85,7 +91,7 @@ class HomeVC: UIViewController{
         setRefresh()
     }
     
-    func  setRefresh() {
+    func setRefresh() {
         let header =   RefreshHeader{ [weak self] in
             self?.getNetData(false)
         }
@@ -100,15 +106,12 @@ class HomeVC: UIViewController{
         tableView.mj_footer?.isAutomaticallyChangeAlpha = true
     }
     
-    
-    
     func getNetData(_ loadMore : Bool = false) {
         if(!loadMore){
             page = 0
         }else{
             page += 1
         }
-        
         HttpUtils.requestData(url: "article/list/\(page)/json", type: MethodType.get,
                               callBack: {(value:HomeModel?) in
                                 //结束刷新
@@ -124,21 +127,15 @@ class HomeVC: UIViewController{
                                 
         })
         
-        
-        
-        
         //加载banner数据
-        HttpUtils.requestData(url: "banner/json", type: MethodType.get,
+        HttpUtils.requestData(url: "banner/json",
+                              type: MethodType.get,
                               callBack: {(value:Array<BannerModel>?) in
                                 self.bannerLists = value ?? []
                                 self.bannerView.imagePaths = value?.map{$0.imagePath} as! Array<String>
                                 self.bannerView.titles = value?.map{ $0.title!} ?? []
-                                
         })
-        
-        
     }
-    
 }
 
 extension HomeVC:UITableViewDataSource,UITableViewDelegate{

@@ -8,6 +8,7 @@
 
 import UIKit
 import JXSegmentedView
+
 class ContentView: UIViewController {
     
     override func viewDidLoad() {
@@ -17,10 +18,7 @@ class ContentView: UIViewController {
         label.text="测试grid"
         self.view.addSubview(label)
         self.view.backgroundColor=UIColor.white
-
     }
-    
-
 }
 
 extension ContentView:JXSegmentedListContainerViewListDelegate{
@@ -28,4 +26,3 @@ extension ContentView:JXSegmentedListContainerViewListDelegate{
         view
     }
 }
-
