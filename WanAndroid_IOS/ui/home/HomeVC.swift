@@ -138,9 +138,9 @@ class HomeVC: UIViewController {
             url: "banner/json",
             type: MethodType.get,
             callBack: {(value:Array<BannerModel>?) in
-              self.bannerLists = value ?? []
-              self.bannerView.imagePaths = value?.map{$0.imagePath} as! Array<String>
-              self.bannerView.titles = value?.map{ $0.title! } ?? []
+                self.bannerLists = value ?? []
+                self.bannerView.imagePaths = value?.map{$0.imagePath} as! Array<String>
+                self.bannerView.titles = value?.map{ $0.title! } ?? []
         })
     }
 }
